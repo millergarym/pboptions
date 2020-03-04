@@ -50,7 +50,11 @@ func searchProtoOpts(ctx context.Context, page, perpage int, textmatch bool) (*g
 	-filename:test.proto
 	-filename:unittest_custom_options.proto
 	-filename:unittest_custom_options_proto3.proto
-	-filename:yara.proto	
+	-filename:yara.proto
+	-filename:gogo.proto
+	-path:vendor
+	-path:third_party
+	-path:google
 `, &github.SearchOptions{
 		TextMatch: textmatch,
 		ListOptions: github.ListOptions{
