@@ -109,9 +109,6 @@ func main() {
 			}
 			shaMap[fields[0]] = int(c)
 		}
-		for k, v := range shaMap {
-			fmt.Printf("%s\t%d\n", k, v)
-		}
 	}
 
 	tmf, f := openf("textmatch.txt", os.O_APPEND)
@@ -126,6 +123,8 @@ func main() {
 	if len(shaMap) == 0 {
 		fmt.Fprintf(resf, "page\tindex\tSHA\tNAME\tPath\tURL\n")
 	}
+
+	collected := 0
 
 	for {
 		if *startPage > 3000 {
@@ -142,6 +141,7 @@ func main() {
 				continue
 			}
 			shaMap[*r.SHA] = 1
+			collected++
 			if r.TextMatches != nil {
 				_, err = fmt.Fprintf(tmf, "%d\t%d\t%s\t%s\t%s\t%s\n%v\n------------------\n", *startPage, j, *r.SHA, *r.Name, *r.Path, *r.HTMLURL, r.TextMatches)
 				if err != nil {
@@ -157,7 +157,7 @@ func main() {
 		resf.Flush()
 		*startPage = *startPage + 1
 	}
-	fmt.Printf("\n")
+	fmt.Printf("collected %d\n", collected)
 	fmt.Fprintf(pagecountF, "page %d\n", *startPage)
 	for k, v := range shaMap {
 		fmt.Fprintf(shaCount, "%s\t%d\n", k, v)
